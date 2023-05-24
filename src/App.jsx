@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import axios from 'axios';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import useQueries from './hooks/QueryHook';
 
 function App() {
   const fetchData = async () => {
@@ -12,16 +12,7 @@ function App() {
     );
     return response.data;
   };
-  const { isLoading, data, error , refetch } = useQuery(['posts'], fetchData, {
-    // cacheTime: 5000,
-    // staleTime: 5000,
-    // refetchOnMount:true,
-    // refetchOnWindowFocus: false,
-    // refetchInterval:2000,
-    // refetchIntervalInBackground:true,
-    enabled:false
-  });
-
+  const [isLoading, data, error, refetch] = useQueries(fetchData , ['post']);
   if (isLoading) {
     return <div>loading ...</div>;
   }
@@ -31,7 +22,7 @@ function App() {
 
   return (
     <>
-    <button onClick={refetch}>fetch the data</button>
+      <button onClick={refetch}>fetch the data</button>
       {data?.map((item) => (
         <div key={item.id}>
           {item.id} , {item.username}
