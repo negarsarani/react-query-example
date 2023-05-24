@@ -4,17 +4,21 @@ import viteLogo from '/vite.svg';
 import './App.css';
 import axios from 'axios';
 import { useQuery, useMutation } from '@tanstack/react-query';
-const Posts = [
-  { id: 1, title: 'negar' },
-  { id: 1, title: 'niloo' },
-];
+
 function App() {
-  const { isLoading, data } = useQuery(['posts'],  async () => {
-    return axios.get('https://jsonplaceholder.typicode.com/users').then((response) => response.data)
-  });
+  const fetchData = async () => {
+    const response = await axios.get(
+      'https://jsonplaceholder.typicode.com/users'
+    );
+    return response.data;
+  };
+  const { isLoading, data, error } = useQuery(['posts'], fetchData);
 
   if (isLoading) {
     return <div>loading ...</div>;
+  }
+  if (error) {
+    return <div>shittt</div>;
   }
 
   return (
@@ -29,7 +33,3 @@ function App() {
 }
 
 export default App;
-
-// function wait(duration) {
-//   return new Promise((resolve) => setTimeout(resolve, duration));
-// }
